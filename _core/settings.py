@@ -28,7 +28,9 @@ CSRF_TRUSTED_ORIGINS = [ 'https://*' ]
 
 # Application definition
 
-INSTALLED_APPS = [
+SHARED_APPS = [
+    'django_tenants',
+    'a_tenant_manager',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,7 +51,33 @@ INSTALLED_APPS = [
     'django_htmx',
 ]
 
+TENANT_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+
+
+    # My apps
+    'a_home',
+    'a_users',
+    
+    # Third party
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django_browser_reload',
+
+]
+
+INSTALLED_APPS = SHARED_APPS + [
+    app for app in TENANT_APPS if app not in SHARED_APPS
+]
+
 MIDDLEWARE = [
+    'django_tenants.middleware.main.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -95,16 +123,22 @@ WSGI_APPLICATION = '_core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django_tenants.postgresql_backend',
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'localhost',
-        'PORT': '5433',
-        
+        'PORT': '5433', 
     }
 }
 
+DATABASE_ROUTERS = (
+    'django_tenants.routers.TenantSyncRouter',
+)
+
+TENANT_MODEL = "a_tenant_manager.Tenant"  # app.Model
+TENANT_DOMAIN_MODEL = "a_tenant_manager.Domain"  # app.Model
+SHOW_PUBLIC_IF_NO_TENANT_FOUND = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
