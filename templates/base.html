@@ -91,7 +91,7 @@
             @apply w-auto
         }
         .alert-info { @apply bg-blue-300 }
-        .alert-success { @apply bg-green-400 }
+        .alert-success { @apply bg-green-400 } 
         .alert-warning { @apply bg-amber-400 }
         .alert-danger { @apply bg-amber-500 }
     </style>
@@ -100,7 +100,9 @@
 	
     {% include 'includes/messages.html' %}
 
-    {% include 'includes/header.html' %}
+    {% load header %}
+    {% header_view request %}
+
 
     {% block layout %}
     {% endblock %}

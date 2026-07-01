@@ -23,6 +23,8 @@ SECRET_KEY = 'django-insecure-rj#-z^kx3j+1ay397otg6j8m_8#v^$^$jys6&41vy^&6le)ezc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+ENVIRONMENT = 'development'
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 CSRF_TRUSTED_ORIGINS = [ 'https://*' ]
 
@@ -49,6 +51,7 @@ SHARED_APPS = [
     'allauth.socialaccount',
     'django_browser_reload',
     'django_htmx',
+    'colorfield'
 ]
 
 TENANT_APPS = [
@@ -177,9 +180,19 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [ BASE_DIR / 'static' ]
+MULTITENANT_RELATIVE_MEDIA_ROOT = 'tenants/%s'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media' 
+
+STORAGES = {
+    "default": {
+        "BACKEND": "a_home.storage.CustomSchemaStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
