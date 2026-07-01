@@ -12,11 +12,11 @@ class CustomSchemaStorage:
                 return FileSystemStorage()
             else:
                 return TenantFileSystemStorage()
-        # else:
-        #     if schema_name == 'public':
-        #         return S3Storage() 
-        #     else:
-        #         return S3TenantStorage(schema_name)
+        else:
+            if schema_name == 'public':
+                return S3Storage() 
+            else:
+                return S3TenantStorage(schema_name)
 
     def save(self, name, content, max_length=None):
         storage_backend = self._get_storage_backend()
