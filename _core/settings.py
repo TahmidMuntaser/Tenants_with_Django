@@ -97,6 +97,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 ROOT_URLCONF = '_core.urls'
+PUBLIC_SCHEMA_URLCONF = '_core.urls_public'
 
 TEMPLATES = [
     {
