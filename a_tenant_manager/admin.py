@@ -6,6 +6,7 @@ class TenantAdminSite(admin.AdminSite):
         super().__init__(*args, **kwargs)
         self.register(Tenant)
         self.register(Domain)
+        self.register(TenantMember)
        
     
 tenant_admin_site = TenantAdminSite(name='tenant_admin')

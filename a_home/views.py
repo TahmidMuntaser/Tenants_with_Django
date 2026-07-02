@@ -24,16 +24,44 @@ def home_view(request):
                 is_primary=True
             ) 
             
+            TenantMember.objects.create(
+                user = request.user,
+                tenant = tenant, 
+                is_admin = True
+            )
+            
             with schema_context(tenant.schema_name):
                 request.user.backend = 'allauth.account.auth_backends.AuthenticationBackend' 
                 login(request, request.user)  
                 
-            return redirect(f'http://{domain.domain}:{settings.PORT}/')  # Redirect to the new tenant's domain   
+            return redirect(f'http://{domain.domain}:{settings.PORT}/') 
+        
+    try:
+        tenant_member = TenantMember.objects.get(user=request.user, tenant=request.tenant)
+    except:
+        tenant_member = None
+        
+    # get the list of tenants 
+    
+    if request.user.is_authenticated:
+        user_tenants = TenantMember.objects.filter(user=request.user)
+    else:
+        user_tenants = None
+    
+    base_domain = f"{settings.BASE_URL}:{settings.PORT}"    
+     
+    if not hasattr(request, 'tenant'):
+        template_name = 'home.html'
+    else: 
+        template_name = 'home_tenant.html' 
     
     context = {
-        'tenant_form': tenant_form
+        'tenant_form': tenant_form,
+        'tenant_member': tenant_member,
+        'user_tenants' : user_tenants,
+        'base_domain' : base_domain
     }
-    return render(request, 'home.html', context)
+    return render(request, template_name, context)
 
 
 # def create_item(request):

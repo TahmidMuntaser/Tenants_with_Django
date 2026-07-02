@@ -1,0 +1,23 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %} 
+
+    <div class="max-w-4xl mx-auto px-8 py-24">
+        <h1>Welcome to {{ request.tenant.name }}</h1>
+
+        {% if user.is_authenticated %}
+            <h2>Hello {{ user.name }}{% if tenant_member.is_admin %} (Admin){% endif %}</h2>
+
+            {% if not tenant_member %}
+            <p>To access this site, contact the Admin.</p>
+            {% else %}
+            <p>Great to have you!</p>
+            {% endif %}
+        
+        {% else %}    
+            <button><a href="{% url 'account_login' %}">Log In</a></button>
+        {% endif %}
+
+    </div>
+
+{% endblock %}
