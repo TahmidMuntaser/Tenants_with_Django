@@ -27,7 +27,7 @@ urlpatterns = [
     path('admin_tenants/', tenant_admin_site.urls),
     path('accounts/', include('allauth.urls')),
     path('', home_view, name="home"),
-    path('create-item/', create_item, name='create_item'),
+    # path('create-item/', create_item, name='create_item'),
     path('profile/', include('a_users.urls')),
     path('@<username>/', profile_view, name="profile"),
 ]
